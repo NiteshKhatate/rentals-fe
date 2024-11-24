@@ -1,0 +1,40 @@
+name: CI/CD for Next.js with Tailwind CSS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16" # Use the appropriate Node version for your project
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting (optional)
+        run: npm run lint # Ensure you have linting configured
+
+      - name: Run tests (optional)
+        run: npm test # Run your tests if configured
+
+      - name: Build the project
+        run: npm run build # Make sure the `next build` command works
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: 2EqibeL3w8y4dkk073Tqbvpo # Use your Vercel API token
+          VERCEL_PROJECT_ID: prj_JitE1M8eXOHuDqYSNrKy1yollS2C # Use your Vercel project ID
+        run: |
+          npx vercel --prod --token $VERCEL_TOKEN --confirm
